@@ -1,0 +1,105 @@
+.post {
+  background-color: lightgrey;
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 10px;
+  border: solid;
+  margin: 8px;
+}
+
+.aPost {
+  padding-bottom: 4px;
+  border-bottom-style: solid;
+  border-width: 1px;
+}
+
+.likes {
+  margin-left: 90%;
+}
+
+.commentTitle {
+  font-weight: bold;
+}
+
+.comment {
+  padding-left: 20px;
+  font-weight: normal;
+}
+
+.createPost {
+  margin: 8px;
+  padding-left: 8px;
+  background-color: lightgrey;
+  width: 100%;
+}
+
+.createPostForm {
+  margin-left: 10%;
+}
+
+.titleInput {
+  width: 75%;
+}
+
+body {
+  font-size: calc(8px + 1vmin);
+}
+
+.buttonCancelSubmit {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-right: 24px;
+}
+
+.buttonCreatePost {
+  /*loat: right;*/
+  margin-right: 8px;
+  margin-top: 8px;
+  font-size: calc(8px + 1vmin);
+}
+
+.buttonsCRUD {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+button:hover {
+  background-color: lightblue;
+}
+
+.buttonCancelSubmit input:hover {
+  background-color: lightblue;
+  font-size: 13px;
+}
+
+textarea {
+  width: 75%;
+  height: 250px;
+  font-size: 18px;
+}
+
+.buttonCancelSubmit input, .buttonCancelSubmit button, input {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.labelTextArea * {
+  vertical-align: top;
+  margin-right: 4px;
+}
+
+.App-header {
+  background-color: lightgrey;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.centerText {
+  text-align: center;
+}
