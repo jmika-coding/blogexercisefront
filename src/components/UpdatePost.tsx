@@ -6,10 +6,7 @@ import { StateUpdatePost, PropsUpdate } from '../models/UpdatePostModel'
 export class UpdatePost extends React.Component<PropsUpdate, StateUpdatePost> {
   constructor(props: PropsUpdate) {
     super(props)
-    this.state = {
-      isActive: false,
-      isDelete: false,
-    };
+    this.state = {};
   }
 
   handleUpdate = async (event: React.MouseEvent<HTMLFormElement>) => {

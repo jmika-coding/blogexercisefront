@@ -7,9 +7,6 @@ export class CreatePost extends React.Component<Props, StateCreatePost> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      isActive: false,
-      isUpdate: false,
-      isDelete: false,
       title: props.title,
       post: props.post
     };

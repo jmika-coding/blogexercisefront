@@ -23,14 +23,7 @@ class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props)
     this.state = {
-      posts: [{
-        id: 0,
-        title: "",
-        post: "",
-        likes: 0,
-        comments: [{id:0, postId:0, comment:""}],
-        showPostInfo: false
-      }],
+      posts: [],
       isActive: false,
       isUpdate: false,
       isDelete: false,
@@ -149,7 +142,7 @@ render() {
       ))}
       </div>
 
-      <CreatePost handleShowOrHide={this.handleShowOrHide} handleCancel={this.handleCancel} isDelete={this.state.isDelete} isActive={this.state.isActive} title="" post=""/>
+      <CreatePost handleCancel={this.handleCancel} isActive={this.state.isActive} title="" post=""/>
       <div className="buttonsCRUD">
         <button onClick={this.handleShowOrHide} hidden={this.state.hideCRUDButtons} className="buttonCreatePost">Create a post</button>
         <button onClick={this.handleUpdate} hidden={this.state.hideCRUDButtons} className="buttonCreatePost">Update a Post</button>
@@ -157,7 +150,10 @@ render() {
       </div>
       <h1 hidden={!this.state.isUpdate && !this.state.isDelete} className="centerText">Select a post</h1>
 
-      <UpdatePost handleInputChange={this.handleInputChange} handleTextAreaChange={this.handleTextAreaChange} handleShowCRUDButtons={this.handleShowCRUDButtons} handleShowOrHide={this.handleShowOrHide} handleCancelUpdate={this.handleCancelUpdate} /*handleUpdateTitle={this.handleUpdateTitle}*/ isDelete={this.state.isDelete} isActive={this.state.isActive} isUpdate={this.state.isUpdate} isPostSelected={this.state.isPostSelected} title={this.state.title} post={this.state.post} likes={this.state.likes} postId={this.state.postId}/>
+      <UpdatePost handleInputChange={this.handleInputChange} handleTextAreaChange={this.handleTextAreaChange}
+        handleShowCRUDButtons={this.handleShowCRUDButtons} handleCancelUpdate={this.handleCancelUpdate}
+        isPostSelected={this.state.isPostSelected} title={this.state.title} post={this.state.post}
+        likes={this.state.likes} postId={this.state.postId}/>
 
     </div>
   );}
