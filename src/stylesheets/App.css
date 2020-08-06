@@ -54,7 +54,6 @@ body {
 }
 
 .buttonCreatePost {
-  /*loat: right;*/
   margin-right: 8px;
   margin-top: 8px;
   font-size: calc(8px + 1vmin);
