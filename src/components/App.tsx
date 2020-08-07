@@ -5,6 +5,7 @@ import { State, Post, PostInfo, Comment } from '../models/AppModel'
 
 import { CreatePost } from './CreatePost'
 import { UpdatePost } from './UpdatePost'
+import { CommentForm } from './CommentForm'
 
 
 const ShowPostInfoOfAPost: FunctionComponent<PostInfo> = ({showPostInfo, likes, comments}) => {
@@ -32,7 +33,8 @@ class App extends React.Component<{}, State> {
       title: "",
       post: "",
       likes: 0,
-      postId: 0
+      postId: 0,
+      isCancelComment: false
     };
 
     this.showPostInfo = this.showPostInfo.bind(this);
@@ -49,6 +51,7 @@ class App extends React.Component<{}, State> {
   handleDelete = () => this.setState({isDelete: !this.state.isDelete, hideCRUDButtons: true})
   handleCancel = () => this.setState({title: "", post: "", isActive: !this.state.isActive, hideCRUDButtons: false})
   handleCancelUpdate = () => this.setState({title: "", post: "", isPostSelected: !this.state.isPostSelected, hideCRUDButtons: false})
+  handleCancelCommentForm = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, showPostInfo: false} : el), isCancelComment: true}))
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({title: event.target.value})
   handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => this.setState({post: event.target.value})
@@ -97,7 +100,7 @@ handleDeleteApi = async (postId: number) => {
 clickOnPost = (id:number) => {
   if(this.state.isUpdate) { // UPDATE
     const post:Post = this.state.posts.find(el => el.id === id)
-      || {title: this.state.title, post: this.state.post, likes: this.state.likes, id: id, comments: [], showPostInfo: false};
+      || {title: this.state.title, post: this.state.post, likes: this.state.likes, id: id, comments: [], showPostInfo: false, isHoverPost: false};
 
     this.setState({title: post.title})
     this.setState({post: post.post})
@@ -108,6 +111,7 @@ clickOnPost = (id:number) => {
   else if(this.state.isDelete){ // DELETE
     if(window.confirm("Do you really want to delete this post ?")) {
       this.handleDeleteApi(id);
+      // Remove from list of post to update the page with the removed post
       this.setState(previousState => ({
         posts: previousState.posts.filter(
           el => el.id !== id
@@ -116,12 +120,14 @@ clickOnPost = (id:number) => {
     }
     this.setState({hideCRUDButtons: false})
   }
-  else { // GET / SHOW INFOS
+  else {// GET / SHOW INFOS
     this.showPostInfo(id);
+    this.setState({hideCRUDButtons: false})
   }
-  this.setState({isActive: false, isUpdate: false, isDelete: false})
+  this.setState({isActive: false, isUpdate: false, isDelete: false, isCancelComment: false})
 }
 
+// https://upmostly.com/tutorials/changing-the-background-color-in-react
 render() {
   return (
     <div className="App">
@@ -133,11 +139,16 @@ render() {
 
       <div>
       {this.state.posts.map((post2:Post) => (
-        <div key={post2.id} className="post" onClick={(() => this.clickOnPost(post2.id))}>
-          <div className="aPost">{post2.title}</div>
-          <div>{post2.post}</div>
+        <div key={post2.id}
+          className={post2.isHoverPost && (this.state.isUpdate || this.state.isDelete) ? "hoverPost" : "post"}
+          onClick={(() => this.clickOnPost(post2.id))}
+          onMouseOver={() => this.setState(previousState => ({posts: previousState.posts.map(post => post.id === post2.id ? {...post, isHoverPost: true} : post ) }))}
+          onMouseLeave={() => this.setState(previousState => ({posts: previousState.posts.map(post => post.id === post2.id ? {...post, isHoverPost: false} : post ) }))}>
+          <h2 className="aPost">{post2.title}</h2>
+          <p>{post2.post}</p>
 
           <ShowPostInfoOfAPost showPostInfo={post2.showPostInfo} likes={post2.likes} comments={post2.comments}/>
+          <CommentForm showPostInfo={post2.showPostInfo} postId={post2.id} handleCancelCommentForm={() => this.handleCancelCommentForm(post2.id)}/>
         </div>
       ))}
       </div>

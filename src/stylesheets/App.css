@@ -7,6 +7,15 @@
   margin: 8px;
 }
 
+.hoverPost {
+  background-color: grey;
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 10px;
+  border: solid;
+  margin: 8px;
+}
+
 .aPost {
   padding-bottom: 4px;
   border-bottom-style: solid;
@@ -78,6 +87,24 @@ textarea {
   width: 75%;
   height: 250px;
   font-size: 18px;
+  resize: none;
+}
+
+.createComment textarea {
+  width: 45%;
+  height: 100px;
+}
+
+.createCommentForm {
+  padding-left: 20px;
+}
+
+.buttonCancelSubmitComment {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-right: 42px;
 }
 
 .buttonCancelSubmit input, .buttonCancelSubmit button, input {
