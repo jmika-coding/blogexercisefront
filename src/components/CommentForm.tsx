@@ -36,8 +36,8 @@ export class CommentForm extends React.Component<CommentProps, CommentState> {
                 <textarea name="post" value={this.state.comment} onChange={this.handleTextAreaChange}/>
               </div>
               <div className="buttonCancelSubmitComment">
-                <input type="button" value="Cancel" onClick={(event: React.MouseEvent) => { event.stopPropagation(); this.props.handleCancelCommentForm(this.props.postId); }}/>
-                <input type="submit" value="Submit"/>
+                <button type="button" value="Cancel" onClick={(event: React.MouseEvent) => { event.stopPropagation(); this.props.handleCancelCommentForm(this.props.postId); }}>Cancel</button>
+                <button type="submit" value="Submit">Submit</button>
               </div>
             </form>
           </div>

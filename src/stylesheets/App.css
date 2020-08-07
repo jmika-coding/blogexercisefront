@@ -22,8 +22,23 @@
   border-width: 1px;
 }
 
+.topBar {
+  padding-bottom: 4px;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top-style: solid;
+    border-width: 1px;
+    border-color: grey;
+    width: 100%;
+}
+
 .likes {
   margin-left: 90%;
+  font-size: 18px;
+  background-color: white;
+  width: 40px;
+  padding-right: 4px;
+  padding-left: 4px;
 }
 
 .commentTitle {
@@ -64,7 +79,28 @@ body {
 .buttonCreatePost {
   margin-right: 8px;
   margin-top: 8px;
-  font-size: calc(8px + 1vmin);
+  font-size: calc(8px + 2vmin);
+  background-color: #908f90;
+  color: white;
+  font-family: Verdana;
+}
+
+.buttonCreatePostUpdate {
+  margin-right: 8px;
+  margin-top: 8px;
+  font-size: calc(8px + 2vmin);
+  background-color: #555455;
+  color: white;
+  font-family: Verdana;
+}
+
+.buttonCreatePostDelete {
+  margin-right: 8px;
+  margin-top: 8px;
+  font-size: calc(8px + 2vmin);
+  background-color: black;
+  color: white;
+  font-family: Verdana;
 }
 
 .buttonsCRUD {
@@ -72,14 +108,14 @@ body {
   flex-direction: row;
   align-items: flex-end;
   justify-content: flex-end;
+  margin-bottom: 18px;
 }
 
 button:hover {
-  background-color: lightblue;
+  background-color: lightgrey;
 }
 
 .buttonCancelSubmit input:hover {
-  background-color: lightblue;
   font-size: 13px;
 }
 
@@ -100,6 +136,7 @@ textarea {
 }
 
 .buttonCancelSubmitComment {
+  margin-top: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -107,9 +144,14 @@ textarea {
   margin-right: 42px;
 }
 
-.buttonCancelSubmit input, .buttonCancelSubmit button, input {
+.buttonCancelSubmit input, .buttonCancelSubmit button, input, .buttonCancelSubmitComment button {
   margin-bottom: 8px;
-  font-size: 18px;
+  font-size: 22px;
+  margin-right: 8px;
+}
+
+.buttonCancelSubmit input:hover, .buttonCancelSubmit button:hover, .buttonCancelSubmitComment button:hover {
+  background-color: lightgrey;
 }
 
 .labelTextArea * {

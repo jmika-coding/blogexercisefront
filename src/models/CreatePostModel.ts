@@ -5,7 +5,7 @@ export interface StateCreatePost {
 
 export interface Props {
   isActive: boolean;
-  handleCancel: (event: React.MouseEvent<HTMLInputElement>) => void;
+  handleCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
   title: string;
   post: string;
 }

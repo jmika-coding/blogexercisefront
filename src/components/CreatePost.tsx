@@ -50,8 +50,8 @@ export class CreatePost extends React.Component<Props, StateCreatePost> {
                 <textarea name="post" value={this.state.post} onChange={this.handleTextAreaChange}/>
               </div>
               <div className="buttonCancelSubmit">
-                <input type="button" value="Cancel" onClick={this.props.handleCancel}/>
-                <input type="submit" value="Submit"/>
+                <button type="button" value="Cancel" onClick={this.props.handleCancel}>Cancel</button>
+                <button type="submit" value="Submit">Submit</button>
               </div>
             </form>
           </div>

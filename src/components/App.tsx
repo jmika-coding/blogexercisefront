@@ -12,7 +12,7 @@ const ShowPostInfoOfAPost: FunctionComponent<PostInfo> = ({showPostInfo, likes, 
   if(!showPostInfo) { return null; }
 
   return (
-    <div>
+    <div className="topBar">
       <div className="likes"><span role="img" aria-label="Likes">👍{likes}</span></div>
 
       <label className="commentTitle">Comments:</label>
@@ -156,8 +156,8 @@ render() {
       <CreatePost handleCancel={this.handleCancel} isActive={this.state.isActive} title="" post=""/>
       <div className="buttonsCRUD">
         <button onClick={this.handleShowOrHide} hidden={this.state.hideCRUDButtons} className="buttonCreatePost">Create a post</button>
-        <button onClick={this.handleUpdate} hidden={this.state.hideCRUDButtons} className="buttonCreatePost">Update a Post</button>
-        <button onClick={this.handleDelete} hidden={this.state.hideCRUDButtons} className="buttonCreatePost">Delete a Post</button>
+        <button onClick={this.handleUpdate} hidden={this.state.hideCRUDButtons} className="buttonCreatePostUpdate">Update a Post</button>
+        <button onClick={this.handleDelete} hidden={this.state.hideCRUDButtons} className="buttonCreatePostDelete">Delete a Post</button>
       </div>
       <h1 hidden={!this.state.isUpdate && !this.state.isDelete} className="centerText">Select a post</h1>
 

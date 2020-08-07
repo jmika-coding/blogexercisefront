@@ -32,8 +32,8 @@ export class UpdatePost extends React.Component<PropsUpdate, StateUpdatePost> {
                 <textarea name="post" value={this.props.post} onChange={this.props.handleTextAreaChange}/>
               </div>
               <div className="buttonCancelSubmit">
-                <input type="button" value="Cancel" onClick={this.props.handleCancelUpdate}/>
-                <input type="submit" value="Submit"/>
+                <button type="button" value="Cancel" onClick={this.props.handleCancelUpdate}>Cancel</button>
+                <button type="submit" value="Submit">Submit</button>
               </div>
             </form>
           </div>
