@@ -50,6 +50,12 @@
   font-weight: normal;
 }
 
+.hoverComment {
+  padding-left: 20px;
+  font-weight: normal;
+  background-color: grey;
+}
+
 .createPost {
   margin: 8px;
   padding-left: 8px;

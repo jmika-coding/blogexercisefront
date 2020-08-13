@@ -20,6 +20,7 @@ export interface Post {
   comments: Comment[];
   showPostInfo: boolean;
   isHoverPost: boolean;
+  isDeleteComment: boolean;
 }
 
 export interface PostInfo {
@@ -32,4 +33,13 @@ export interface Comment {
   id: number;
   postId: number;
   comment: string;
+  isHoverComment: boolean;
+}
+
+export interface FunctionComment {
+  handleClickOnComment: (postId:  number, commentId: number) => void;
+  handleMouseOverComment: (postId:  number, commentId: number) => void;
+  handleMouseLeaveComment: (postId:  number, commentId: number) => void;
+  postId: number;
+  isDeleteComment: boolean;
 }
