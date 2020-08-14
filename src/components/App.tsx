@@ -8,7 +8,7 @@ import { UpdatePost } from './UpdatePost'
 import { CommentForm } from './CommentForm'
 
 
-const ShowPostInfoOfAPost: FunctionComponent<PostInfo & FunctionComment> = ({showPostInfo, likes, comments, handleClickOnComment, handleMouseOverComment, handleMouseLeaveComment, postId, isDeleteComment}) => {
+const ShowPostInfoOfAPost: FunctionComponent<PostInfo & FunctionComment> = ({showPostInfo, likes, comments, handleClickOnComment, handleMouseOverComment, handleMouseLeaveComment, postId, isDeleteComment, isUpdateComment}) => {
   if(!showPostInfo) { return null; }
 
   return (
@@ -18,7 +18,7 @@ const ShowPostInfoOfAPost: FunctionComponent<PostInfo & FunctionComment> = ({sho
       <label className="commentTitle">Comments:</label>
       {comments.map((comment:Comment) => (
         <div key={comment.id}
-          className={(comment.isHoverComment && isDeleteComment) ? "hoverComment" : "comment"}
+          className={(comment.isHoverComment && (isDeleteComment || isUpdateComment)) ? "hoverComment" : "comment"}
           onClick={(event:React.MouseEvent) => { event.stopPropagation(); handleClickOnComment(postId, comment.id)} }
           onMouseOver={() => handleMouseOverComment(postId, comment.id)}
           onMouseLeave={() => handleMouseLeaveComment(postId, comment.id)}
@@ -43,7 +43,9 @@ class App extends React.Component<{}, State> {
       post: "",
       likes: 0,
       postId: 0,
-      isCancelComment: false
+      comment: "",
+      commentId: 0,
+      isUpdatingComment: false
     };
 
     this.showPostInfo = this.showPostInfo.bind(this);
@@ -59,14 +61,17 @@ class App extends React.Component<{}, State> {
   // https://stackoverflow.com/questions/35537229/how-to-update-parents-state-in-react
   handleShowOrHide = () => this.setState({isActive: !this.state.isActive, hideCRUDButtons: true})
   handleUpdate = () => this.setState({isUpdate: !this.state.isUpdate, hideCRUDButtons: true})
+  handleUpdateComment = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, isUpdateComment: true} : {...el, isUpdateComment: false}) }))
   handleDelete = () => this.setState({isDelete: !this.state.isDelete, hideCRUDButtons: true})
   handleDeleteComment = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, isDeleteComment: true} : {...el, isDeleteComment: false}) }))
   handleCancel = () => this.setState({title: "", post: "", isActive: !this.state.isActive, hideCRUDButtons: false})
   handleCancelUpdate = () => this.setState({title: "", post: "", isPostSelected: !this.state.isPostSelected, hideCRUDButtons: false})
-  handleCancelCommentForm = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, showPostInfo: false} : el), isCancelComment: true}))
+  handleCancelCommentForm = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, showPostInfo: false, isUpdateComment: false} : el), isUpdatingComment: false, comment: ""}))
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({title: event.target.value})
   handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => this.setState({post: event.target.value})
+
+  handleTextAreaChangeComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => this.setState({comment: event.target.value})
 
   handleShowCRUDButtons = () => this.setState({hideCRUDButtons: false})
 
@@ -131,9 +136,9 @@ clickOnPost = (id:number) => {
   }
   else {// GET / SHOW INFOS
     this.showPostInfo(id);
-    this.setState({hideCRUDButtons: false, isPostSelected: false})
+    this.setState({hideCRUDButtons: false, isPostSelected: false, isUpdatingComment: false, comment: ""})
   }
-  this.setState({isActive: false, isUpdate: false, isDelete: false, isCancelComment: false})
+  this.setState({isActive: false, isUpdate: false, isDelete: false})
 }
 
 handleDeleteApiComment = async (commentId: number) => {
@@ -146,9 +151,18 @@ handleDeleteApiComment = async (commentId: number) => {
 }
 
 handleClickOnComment = (postId: number, commentId:number) => {
-  const isDeleteComment = this.state.posts.find(post => post.id === postId)?.isDeleteComment
+  const post = this.state.posts.find(post => post.id === postId);
 
-  if(isDeleteComment){ // DELETE
+  this.setState({commentId: commentId || 0})
+
+  if(post?.isUpdateComment){ // UPDATE
+    this.setState(previousState => ({
+      posts: previousState.posts.map(post => post.id === postId ? {...post, isUpdateComment: false} : post),
+      comment: post.comments.find(comment => comment.id === commentId)?.comment || "",
+      isUpdatingComment: true
+    }))
+  }
+  else if(post?.isDeleteComment){ // DELETE
     if(window.confirm("Do you really want to delete this comment ?")) {
       this.handleDeleteApiComment(commentId);
 
@@ -156,12 +170,12 @@ handleClickOnComment = (postId: number, commentId:number) => {
       this.setState(previousState => ({
         posts: previousState.posts.map(post => {
           if(post.id !== postId) {return post;}
-          const filterdComment = post.comments.filter(comment => comment.id !== commentId);
-          return {...post, comments: filterdComment}
+          const filteredComment = post.comments.filter(comment => comment.id !== commentId);
+          return {...post, comments: filteredComment}
         })
       }))
     }
-    this.setState(previousState => ({posts: previousState.posts.map(el => el.id === postId ? {...el, isDeleteComment: false} : el)}))
+    this.setState(previousState => ({posts: previousState.posts.map(el => el.id === postId ? {...el, isUpdateComment: false, isDeleteComment: false} : el)}))
   }
 }
 
@@ -185,10 +199,11 @@ render() {
           <h2 className="aPost">{post2.title}</h2>
           <p>{post2.post}</p>
 
-          <ShowPostInfoOfAPost showPostInfo={post2.showPostInfo} likes={post2.likes} comments={post2.comments} handleClickOnComment={this.handleClickOnComment} handleMouseOverComment={this.handleMouseOverComment} handleMouseLeaveComment={this.handleMouseLeaveComment} postId={post2.id} isDeleteComment={post2.isDeleteComment}/>
-          <CommentForm showPostInfo={post2.showPostInfo} postId={post2.id} handleCancelCommentForm={() => this.handleCancelCommentForm(post2.id)}/>
+          <ShowPostInfoOfAPost showPostInfo={post2.showPostInfo} likes={post2.likes} comments={post2.comments} handleClickOnComment={this.handleClickOnComment} handleMouseOverComment={this.handleMouseOverComment} handleMouseLeaveComment={this.handleMouseLeaveComment} postId={post2.id} isDeleteComment={post2.isDeleteComment} isUpdateComment={post2.isUpdateComment}/>
+          <CommentForm showPostInfo={post2.showPostInfo} postId={post2.id} handleCancelCommentForm={() => this.handleCancelCommentForm(post2.id)} handleTextAreaChangeComment={this.handleTextAreaChangeComment} comment={this.state.comment} commentId={this.state.commentId} isUpdate={this.state.posts.find(post => post.id === post2.id)?.isUpdateComment || this.state.isUpdatingComment}/>
           <div className="buttonsCRUD">
-            <button onClick={() => this.handleDeleteComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment} className="buttonCreatePostDelete">Delete a Comment</button>
+            <button onClick={() => this.handleUpdateComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment} className="buttonCreatePostUpdate">Update a Comment</button>
+            <button onClick={() => this.handleDeleteComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment} className="buttonCreatePostDelete">Delete a Comment</button>
           </div>
         </div>
       ))}

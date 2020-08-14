@@ -9,7 +9,9 @@ export interface State {
   likes: number;
   postId: number;
   isPostSelected: boolean;
-  isCancelComment: boolean;
+  comment: string;
+  commentId: number;
+  isUpdatingComment: boolean;
 }
 
 export interface Post {
@@ -21,6 +23,7 @@ export interface Post {
   showPostInfo: boolean;
   isHoverPost: boolean;
   isDeleteComment: boolean;
+  isUpdateComment: boolean;
 }
 
 export interface PostInfo {
@@ -42,4 +45,5 @@ export interface FunctionComment {
   handleMouseLeaveComment: (postId:  number, commentId: number) => void;
   postId: number;
   isDeleteComment: boolean;
+  isUpdateComment: boolean;
 }
