@@ -9,7 +9,6 @@ export interface State {
   likes: number;
   postId: number;
   isPostSelected: boolean;
-  comment: string;
   commentId: number;
   isUpdatingComment: boolean;
 }
@@ -24,6 +23,7 @@ export interface Post {
   isHoverPost: boolean;
   isDeleteComment: boolean;
   isUpdateComment: boolean;
+  commentSelected: string;
 }
 
 export interface PostInfo {
