@@ -38,11 +38,11 @@ export class PostForm extends React.Component<Props, StateCreatePost> {
       <div>
           <div hidden={!this.props.isActive} className="createPost">
             <h3>{(this.props.isPostSelected ? "Update" : "Create") + " a post"}</h3>
-            <form onSubmit={this.props.isPostSelected ? this.handleUpdate : this.handleSubmit} className="createPostForm">
+            <form onSubmit={this.props.isPostSelected ? this.handleUpdate : this.handleSubmit} className="createPostForm" aria-label="postForm">
               <label>Title: <input type="text" name="title" value={this.props.title} onChange={this.props.handleInputChange} className="titleInput"/></label><br/>
               <div className="labelTextArea">
                 <label>Post:</label>
-                <textarea name="post" value={this.props.post} onChange={this.props.handleTextAreaChange}/>
+                <textarea name="post" value={this.props.post} onChange={this.props.handleTextAreaChange} aria-label="textarea-post"/>
               </div>
               <div className="buttonCancelSubmit">
                 <button type="button" value="Cancel" onClick={this.props.handleCancel}>Cancel</button>

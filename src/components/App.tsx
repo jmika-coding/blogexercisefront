@@ -29,6 +29,7 @@ const ShowPostInfoOfAPost: FunctionComponent<PostInfo & FunctionComment> = ({sho
 )}
 
 class App extends React.Component<{}, State> {
+  mounted!: boolean;
   constructor(props: any) {
     super(props)
     this.state = {
@@ -45,6 +46,8 @@ class App extends React.Component<{}, State> {
       commentId: 0,
       isUpdatingComment: false
     };
+
+    this.mounted = false;
 
     this.showPostInfo = this.showPostInfo.bind(this);
     this.handleDeleteApi = this.handleDeleteApi.bind(this);
@@ -77,9 +80,17 @@ class App extends React.Component<{}, State> {
   handleMouseLeaveComment  = (postId: number, commentId: number) => this.setState((previousState:State) => ({posts: previousState.posts.map((post:Post) => post.id === postId ? { ...post, comments: post.comments.map(comment => comment.id === commentId ? {...comment, isHoverComment: false}: comment)} : post )}) )
 
   componentDidMount(){
+    this.mounted = true;
+
     this.callApi().then((response: Post[]) => {
-      this.setState({posts: response});
+      if(this.mounted) {
+        this.setState({posts: response});
+      }
     })
+  }
+
+  componentWillUnmount(){
+    this.mounted = false;
   }
 
   callApi = async() => {
