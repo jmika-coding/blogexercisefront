@@ -9,6 +9,14 @@ It was bootstrapped with `Create React App`.
 To launch project:
 * `npm run start` or `yarn start`
 
+To launch test:
+* `npm run test` or `yarn test`
+
+Before launching test, you need to install the selenium's driver of the browser that will be used for testing.<br />
+It is required as some of the test use selenium.<br />
+And add the driver to PATH: `export PATH="$PATH:/path/to/chromedriver"`<br />
+It is explained on the selenium page.
+https://www.selenium.dev/documentation/en/webdriver/driver_requirements/
 
 To build project:
 * `npm run build` or `yarn build`
