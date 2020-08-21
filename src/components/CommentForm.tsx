@@ -3,6 +3,8 @@ import '../stylesheets/App.css';
 
 import { CommentProps, CommentState } from '../models/CommentFormModel'
 
+import JoditEditor from "jodit-react"
+
 export class CommentForm extends React.Component<CommentProps, CommentState> {
   constructor(props: CommentProps) {
     super(props)
@@ -40,7 +42,9 @@ export class CommentForm extends React.Component<CommentProps, CommentState> {
             <form onSubmit={this.props.isUpdateComment ? this.handleUpdateComment : this.handleSubmitComment} className="createCommentForm">
               <div className="labelTextArea">
                 <label>Comment:</label>
-                <textarea name="post" value={this.props.commentSelected} onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => this.props.handleTextAreaChangeComment(event, this.props.postId)}/>
+                <div className="JoditEditorComment">
+                  <JoditEditor value={this.props.commentSelected} onChange={(comment) => this.props.handleTextAreaChangeComment(comment, this.props.postId)}/>
+                </div>
               </div>
               <div className="buttonCancelSubmitComment">
                 <button type="button" value="Cancel" onClick={() => this.props.handleCancelCommentForm(this.props.postId)}>Cancel</button>

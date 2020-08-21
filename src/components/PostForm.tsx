@@ -3,6 +3,8 @@ import '../stylesheets/App.css';
 
 import {StateCreatePost, Props} from '../models/PostFormModel'
 
+import JoditEditor from 'jodit-react';
+
 export class PostForm extends React.Component<Props, StateCreatePost> {
   constructor(props: Props) {
     super(props)
@@ -42,7 +44,9 @@ export class PostForm extends React.Component<Props, StateCreatePost> {
               <label>Title: <input type="text" name="title" value={this.props.title} onChange={this.props.handleInputChange} className="titleInput"/></label><br/>
               <div className="labelTextArea">
                 <label>Post:</label>
-                <textarea name="post" value={this.props.post} onChange={this.props.handleTextAreaChange} aria-label="textarea-post"/>
+                <div className="JoditEditorPost">
+                  <JoditEditor value={this.props.post} onChange={this.props.handleTextAreaChange} aria-label="textarea-post"/>
+                </div>
               </div>
               <div className="buttonCancelSubmit">
                 <button type="button" value="Cancel" onClick={this.props.handleCancel}>Cancel</button>

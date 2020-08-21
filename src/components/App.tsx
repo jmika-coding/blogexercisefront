@@ -6,6 +6,13 @@ import { State, Post, PostInfo, Comment, FunctionComment } from '../models/AppMo
 import { PostForm } from './PostForm'
 import { CommentForm } from './CommentForm'
 
+// TODO: problem, when delete a comment it deletes it and restore old value
+// One of the commit before didn't have this problem, to check
+
+// To convert the html code from comment and post, to text that will be view
+// React doc says dangerous, expose users to cross-site scripting XSS attack
+// TODO: maybe find another way to convert html code less risky
+const convertHtmlToText = (post: string) => {return {__html: post} }
 
 const ShowPostInfoOfAPost: FunctionComponent<PostInfo & FunctionComment> = ({showPostInfo, likes, comments, handleClickOnComment, handleMouseOverComment, handleMouseLeaveComment, postId, isDeleteComment, isUpdateComment}) => {
   if(!showPostInfo) { return null; }
@@ -15,16 +22,17 @@ const ShowPostInfoOfAPost: FunctionComponent<PostInfo & FunctionComment> = ({sho
       <div className="likes"><span role="img" aria-label="Likes">👍{likes}</span></div>
 
       <label className="commentTitle">Comments:</label>
-      {comments.map((comment:Comment) => (
+        {comments.length > 0 ? comments.map((comment:Comment) => (
         <div key={comment.id}
           className={(comment.isHoverComment && (isDeleteComment || isUpdateComment)) ? "hoverComment" : "comment"}
           onClick={(event:React.MouseEvent) => { if(isUpdateComment){ event.stopPropagation();} handleClickOnComment(postId, comment.id)} }
           onMouseOver={() => handleMouseOverComment(postId, comment.id)}
           onMouseLeave={() => handleMouseLeaveComment(postId, comment.id)}
         >
-        {comment.comment}
+          <div dangerouslySetInnerHTML={convertHtmlToText(comment.comment)}/>
         </div>
-      ))}
+      ))
+      : <div className="italicTextComment">There is no comments</div>}
     </div>
 )}
 
@@ -70,9 +78,9 @@ class App extends React.Component<{}, State> {
   handleCancelCommentForm = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, showPostInfo: false, isUpdateComment: false, commentSelected: ""} : el), isUpdatingComment: false}))
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({title: event.target.value})
-  handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => this.setState({post: event.target.value})
+  handleTextAreaChange = (post: string) => this.setState({post: post})
 
-  handleTextAreaChangeComment = (event: React.ChangeEvent<HTMLTextAreaElement>, postId: number) => {event.persist(); this.setState(previousState => ({posts: previousState.posts.map(post => post.id === postId ? {...post, commentSelected: event.target.value} : post)}))}
+  handleTextAreaChangeComment = (comment: string, postId: number) => { this.setState(previousState => ({posts: previousState.posts.map(post => post.id === postId ? {...post, commentSelected: comment} : post)}))}
 
   handleShowCRUDButtons = () => this.setState({hideCRUDButtons: false})
 
@@ -212,10 +220,10 @@ render() {
           onMouseOver={() => this.setState(previousState => ({posts: previousState.posts.map(post => post.id === post2.id ? {...post, isHoverPost: true} : post ) }))}
           onMouseLeave={() => this.setState(previousState => ({posts: previousState.posts.map(post => post.id === post2.id ? {...post, isHoverPost: false} : post ) }))}>
           <h2 className="aPost">{post2.title}</h2>
-          <p>{post2.post}</p>
+          <div dangerouslySetInnerHTML={convertHtmlToText(post2.post)}/>
 
           <ShowPostInfoOfAPost showPostInfo={post2.showPostInfo} likes={post2.likes} comments={post2.comments} handleClickOnComment={this.handleClickOnComment} handleMouseOverComment={this.handleMouseOverComment} handleMouseLeaveComment={this.handleMouseLeaveComment} postId={post2.id} isDeleteComment={post2.isDeleteComment} isUpdateComment={post2.isUpdateComment}/>
-          <CommentForm showPostInfo={post2.showPostInfo} postId={post2.id} handleCancelCommentForm={() => this.handleCancelCommentForm(post2.id)} handleTextAreaChangeComment={(event: React.ChangeEvent<HTMLTextAreaElement>) => this.handleTextAreaChangeComment(event, post2.id)} commentSelected={post2.commentSelected} commentId={this.state.commentId} isUpdateOrDelete={this.state.isUpdate || this.state.isDelete} isUpdateComment={this.state.posts.find(post => post.id === post2.id)?.isUpdateComment || this.state.isUpdatingComment}/>
+          <CommentForm showPostInfo={post2.showPostInfo} postId={post2.id} handleCancelCommentForm={() => this.handleCancelCommentForm(post2.id)} handleTextAreaChangeComment={(comment: string) => this.handleTextAreaChangeComment(comment, post2.id)} commentSelected={post2.commentSelected} commentId={this.state.commentId} isUpdateOrDelete={this.state.isUpdate || this.state.isDelete} isUpdateComment={this.state.posts.find(post => post.id === post2.id)?.isUpdateComment || this.state.isUpdatingComment}/>
           <div className="buttonsCRUD">
             <button onClick={() => this.handleUpdateComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment} className="buttonCreatePostUpdate">Update a Comment</button>
             <button onClick={() => this.handleDeleteComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment} className="buttonCreatePostDelete">Delete a Comment</button>

@@ -15,7 +15,9 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
     "selenium-webdriver": "^4.0.0-alpha.7",
-    "typescript": "3.9.7"
+    "typescript": "3.9.7",
+    "jodit": "3.4.23",
+    "jodit-react": "1.0.59"
   },
   "scripts": {
     "start": "react-scripts start",

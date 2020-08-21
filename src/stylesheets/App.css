@@ -67,7 +67,7 @@
 }
 
 .titleInput {
-  width: 75%;
+  width: 70%;
 }
 
 body {
@@ -147,7 +147,8 @@ textarea {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-right: 42px;
+  margin-right: -22px;
+  margin-bottom: 16px;
 }
 
 .buttonCancelSubmit input, .buttonCancelSubmit button, input, .buttonCancelSubmitComment button {
@@ -175,4 +176,25 @@ textarea {
 
 .centerText {
   text-align: center;
+}
+
+.JoditEditorPost {
+  margin-left: 42px;
+  width: 93%;
+  margin-bottom: 16px;
+}
+
+.JoditEditorComment {
+  margin-left: 80px;
+  width: 56%;
+}
+
+.jodit-wysiwyg, .jodit-workplace {
+  min-height: 150px !important;
+}
+
+.italicTextComment {
+  padding-left: 20px;
+  font-style: italic;
+  font-size: LARGE;
 }
