@@ -223,8 +223,8 @@ render() {
           <ShowPostInfoOfAPost showPostInfo={post2.showPostInfo} likes={post2.likes} comments={post2.comments} handleClickOnComment={this.handleClickOnComment} handleMouseOverComment={this.handleMouseOverComment} handleMouseLeaveComment={this.handleMouseLeaveComment} postId={post2.id} isDeleteComment={post2.isDeleteComment} isUpdateComment={post2.isUpdateComment}/>
           <CommentForm showPostInfo={post2.showPostInfo} postId={post2.id} handleCancelCommentForm={() => this.handleCancelCommentForm(post2.id)} handleTextAreaChangeComment={(comment: string) => this.handleTextAreaChangeComment(comment, post2.id)} commentSelected={post2.commentSelected} commentId={this.state.commentId} isUpdateOrDelete={this.state.isUpdate || this.state.isDelete} isUpdateComment={this.state.posts.find(post => post.id === post2.id)?.isUpdateComment || this.state.isUpdatingComment}/>
           <div className="buttonsCRUD">
-            <button onClick={() => this.handleUpdateComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment} className="buttonCreatePostUpdate">Update a Comment</button>
-            <button onClick={() => this.handleDeleteComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment} className="buttonCreatePostDelete">Delete a Comment</button>
+            <button onClick={() => this.handleUpdateComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment || post2.comments.length === 0} className="buttonCreatePostUpdate">Update a Comment</button>
+            <button onClick={() => this.handleDeleteComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment || post2.comments.length === 0} className="buttonCreatePostDelete">Delete a Comment</button>
           </div>
         </div>
       ))}
