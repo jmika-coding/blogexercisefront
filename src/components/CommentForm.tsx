@@ -14,24 +14,31 @@ export class CommentForm extends React.Component<CommentProps, CommentState> {
     this.handleUpdateComment = this.handleUpdateComment.bind(this);
   }
 
-  handleSubmitComment = async () => {
-    const requestOptions: any = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ comment: this.props.commentSelected })
-    }
+  checkIfCommentSelectedEmptyAndCallApiIfNot = async (event: React.FormEvent<HTMLFormElement>, callApi:any) => this.props.commentSelected === "" ? (() => { event.preventDefault(); window.alert("Comment is empty. Nothing will be done.");})() : await callApi();
 
-    await fetch("http://localhost:3000/comments?postId=" + this.props.postId, requestOptions);
+  handleSubmitComment = async (event: React.FormEvent<HTMLFormElement>) => {
+    this.checkIfCommentSelectedEmptyAndCallApiIfNot(event, async () => {
+      const requestOptions: any = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comment: this.props.commentSelected })
+      }
+
+      await fetch("http://localhost:3000/comments?postId=" + this.props.postId, requestOptions);
+    });
+
   }
 
-  handleUpdateComment = async () => {
-    const requestOptions: any = {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ comment: this.props.commentSelected })
-    }
+  handleUpdateComment = async (event: React.FormEvent<HTMLFormElement>) => {
+    this.checkIfCommentSelectedEmptyAndCallApiIfNot(event, async () => {
+      const requestOptions: any = {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comment: this.props.commentSelected })
+      }
 
-    await fetch("http://localhost:3000/comments/" + this.props.commentId, requestOptions);
+      await fetch("http://localhost:3000/comments/" + this.props.commentId, requestOptions);
+    });
   }
 
   render () {

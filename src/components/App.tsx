@@ -22,7 +22,7 @@ const ShowPostInfoOfAPost: FunctionComponent<PostInfo & FunctionComment> = ({sho
       <div className="likes"><span role="img" aria-label="Likes">👍{likes}</span></div>
 
       <label className="commentTitle">Comments:</label>
-        {comments.length > 0 ? comments.map((comment:Comment) => (
+        {comments?.length > 0 ? comments.map((comment:Comment) => (
         <div key={comment.id}
           className={(comment.isHoverComment && (isDeleteComment || isUpdateComment)) ? "hoverComment" : "comment"}
           onClick={(event:React.MouseEvent) => { if(isUpdateComment){ event.stopPropagation();} handleClickOnComment(postId, comment.id)} }
@@ -69,13 +69,13 @@ class App extends React.Component<{}, State> {
   }
 
   // https://stackoverflow.com/questions/35537229/how-to-update-parents-state-in-react
-  handleShowOrHide = () => this.setState({isActive: !this.state.isActive, hideCRUDButtons: true})
+  handleShowOrHide = () => this.setState({isActive: true, hideCRUDButtons: true})
   handleUpdate = () => this.setState({isUpdate: true, hideCRUDButtons: true})
   handleUpdateComment = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, isUpdateComment: true} : {...el, isUpdateComment: false}) }))
   handleDelete = () => this.setState({isDelete: !this.state.isDelete, hideCRUDButtons: true})
   handleDeleteComment = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, isDeleteComment: true} : {...el, isDeleteComment: false}) }))
   handleCancel = () => this.setState({title: "", post: "", isActive: false, isPostSelected: false, hideCRUDButtons: false})
-  handleCancelCommentForm = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, showPostInfo: false, isUpdateComment: false, commentSelected: ""} : el), isUpdatingComment: false}))
+  handleCancelCommentForm = (id: number) => this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id ? {...el, showPostInfo: false, isUpdateComment: false, isDeleteComment: false, commentSelected: ""} : el), isUpdatingComment: false}))
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({title: event.target.value})
   handleTextAreaChange = (post: string) => this.setState({post: post})
@@ -122,11 +122,12 @@ class App extends React.Component<{}, State> {
       this.getCommentsForAPost(id).then((comments:Comment[]) =>
         this.setState(previousState => ({
           posts: previousState.posts.map(
-            el => el.id === id? {...el, comments: comments, showPostInfo: true, hasInfo: true }: el
+            el => el.id === id? {...el, comments: comments, hasInfo: true }: el
           )
         }))
       )
     }
+    this.setState(previousState => ({posts: previousState.posts.map(el => el.id === id? {...el, showPostInfo: true}: el)}))
   }
 
 handleDeleteApi = async (postId: number) => {
@@ -223,8 +224,8 @@ render() {
           <ShowPostInfoOfAPost showPostInfo={post2.showPostInfo} likes={post2.likes} comments={post2.comments} handleClickOnComment={this.handleClickOnComment} handleMouseOverComment={this.handleMouseOverComment} handleMouseLeaveComment={this.handleMouseLeaveComment} postId={post2.id} isDeleteComment={post2.isDeleteComment} isUpdateComment={post2.isUpdateComment}/>
           <CommentForm showPostInfo={post2.showPostInfo} postId={post2.id} handleCancelCommentForm={() => this.handleCancelCommentForm(post2.id)} handleTextAreaChangeComment={(comment: string) => this.handleTextAreaChangeComment(comment, post2.id)} commentSelected={post2.commentSelected} commentId={this.state.commentId} isUpdateOrDelete={this.state.isUpdate || this.state.isDelete} isUpdateComment={this.state.posts.find(post => post.id === post2.id)?.isUpdateComment || this.state.isUpdatingComment}/>
           <div className="buttonsCRUD">
-            <button onClick={() => this.handleUpdateComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment || post2.comments.length === 0} className="buttonCreatePostUpdate">Update a Comment</button>
-            <button onClick={() => this.handleDeleteComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment || post2.comments.length === 0} className="buttonCreatePostDelete">Delete a Comment</button>
+            <button onClick={() => this.handleUpdateComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment || post2.comments?.length === 0} className="buttonCreatePostUpdate">Update a Comment</button>
+            <button onClick={() => this.handleDeleteComment(post2.id)} hidden={!post2.showPostInfo || post2.isDeleteComment || post2.isUpdateComment || post2.comments?.length === 0} className="buttonCreatePostDelete">Delete a Comment</button>
           </div>
         </div>
       ))}
