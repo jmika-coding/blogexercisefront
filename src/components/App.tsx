@@ -117,13 +117,17 @@ class App extends React.Component<{}, State> {
 
   // https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
   showPostInfo = (id:number) => {
-  this.getCommentsForAPost(id).then((comments:Comment[]) =>
-    this.setState(previousState => ({
-      posts: previousState.posts.map(
-        el => el.id === id? {...el, comments: comments, showPostInfo: true }: el
+    const hasInfo = this.state.posts.find(post => post.id ===id)?.hasInfo
+    if(!hasInfo) {
+      this.getCommentsForAPost(id).then((comments:Comment[]) =>
+        this.setState(previousState => ({
+          posts: previousState.posts.map(
+            el => el.id === id? {...el, comments: comments, showPostInfo: true, hasInfo: true }: el
+          )
+        }))
       )
-    }))
-  )}
+    }
+  }
 
 handleDeleteApi = async (postId: number) => {
   const requestOptions: any = {
@@ -187,16 +191,10 @@ handleClickOnComment = (postId: number, commentId:number) => {
   }
   else if(post?.isDeleteComment){ // DELETE
     if(window.confirm("Do you really want to delete this comment ?")) {
+      // Delete it with call to Api
       this.handleDeleteApiComment(commentId);
-
       // Remove from list of comment to update the page with the removed comment
-      this.setState(previousState => ({
-        posts: previousState.posts.map(post => {
-          if(post.id !== postId) {return post;}
-          const filteredComment = post.comments.filter(comment => comment.id !== commentId);
-          return {...post, comments: filteredComment}
-        })
-      }))
+      this.setState(previousState => ({posts: previousState.posts.map(post => post.id === postId ? {...post, comments: post.comments.filter(comment => comment.id !== commentId)} : post)}))
     }
     this.setState(previousState => ({posts: previousState.posts.map(el => el.id === postId ? {...el, isUpdateComment: false, isDeleteComment: false} : el)}))
   }

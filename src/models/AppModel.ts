@@ -24,6 +24,7 @@ export interface Post {
   isDeleteComment: boolean;
   isUpdateComment: boolean;
   commentSelected: string;
+  hasInfo: boolean;
 }
 
 export interface PostInfo {
